@@ -350,6 +350,9 @@ def evalrel(func=min, input=None, assumptions=[]):
     sfunc = (Min if func is min else Max)  # Choose sympy's Min/Max
     rfunc = (rmin if func is min else rmax)  # Choose built-in MIN/MAX
 
+    if len(input) == 1:
+        return input[0]
+
     mapper = {}
 
     processed = []
@@ -394,9 +397,8 @@ def evalrel(func=min, input=None, assumptions=[]):
 
     try:
         bool(sfunc(*input))  # Can it be evaluated or simplified?
-        newargs = sfunc(*input).args
-        input = list(OrderedDict.fromkeys(newargs))
-        # import pdb;pdb.set_trace()
+        newfunc = sfunc(*input)
+        input = list(OrderedDict.fromkeys(newfunc.args))
         return rfunc(*input)
     except TypeError:
         return rfunc(*input)

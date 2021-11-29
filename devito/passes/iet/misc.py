@@ -132,25 +132,26 @@ def relax_incr_dimensions(iet, **kwargs):
 
 
             # import pdb;pdb.set_trace()
-            
+
             # minassumptions = [Gt(i > j) if (i.parent or i) is j else None for i in defines for j in defines]
 
             defmin = list(OrderedDict.fromkeys(defmin))
             defmax = list(OrderedDict.fromkeys(defmax))
 
 
-            defmin = [j.subs(min_map) if j in min_map else j for j in defmin]
-            defmax = [j.subs(max_map) if j in max_map else j for j in defmax]
+            #defmin = [j.subs(min_map) if j in min_map else j for j in defmin]
+            #defmax = [j.subs(max_map) if j in max_map else j for j in defmax]
 
-            # defmin = [j.subs(min_map) for j in defmin if j in min_map]
-            # defmax = [j.subs(max_map) for j in defmax if j in max_map]
+            defmin = [j.subs(min_map) for j in defmin if j in min_map]
+            defmax = [j.subs(max_map) for j in defmax if j in max_map]
 
-            candsmax = evalrel(max, defmax)
-            candsmin = evalrel(min, defmin)
+            # candsmax = evalrel(max, defmax)
+            # candsmin = evalrel(min, defmin)
 
-            defmax = list(OrderedDict.fromkeys(candsmax.args))
-            defmin = list(OrderedDict.fromkeys(candsmin.args))
-            import pdb;pdb.set_trace()
+            # import pdb;pdb.set_trace()
+            #defmax = list(OrderedDict.fromkeys(candsmax.args))
+            #defmin = list(OrderedDict.fromkeys(candsmin.args))
+
             # Interval care
             iter_min = evalrel(max, defmin)
             iter_max = evalrel(min, defmax)
