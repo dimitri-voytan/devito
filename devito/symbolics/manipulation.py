@@ -394,7 +394,9 @@ def evalrel(func=min, input=None, assumptions=[]):
 
     try:
         bool(sfunc(*input))  # Can it be evaluated or simplified?
-        input = list(OrderedDict.fromkeys(input))
+        newargs = sfunc(*input).args
+        input = list(OrderedDict.fromkeys(newargs))
+        # import pdb;pdb.set_trace()
         return rfunc(*input)
     except TypeError:
         return rfunc(*input)
