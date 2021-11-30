@@ -360,7 +360,7 @@ def evalrel(func=min, input=None, assumptions=[]):
                    asm.reversed for asm in assumptions]
 
     for asm in assumptions:
-        if (asm.__class__ in (Ge, Gt)) and asm.rhs.is_Add and asm.lhs.is_positive:
+        if asm.is_Gte and asm.rhs.is_Add and asm.lhs.is_positive:
             # If `c >= a + b, {a, b, c} >= 0` then add 'c>=a, c>=a'
             if all(i.is_positive for i in asm.rhs.args):
                 processed.extend(Ge(asm.lhs, i) for i in asm.rhs.args)
@@ -368,6 +368,8 @@ def evalrel(func=min, input=None, assumptions=[]):
             elif len(asm.rhs.args) == 2:
                 processed.extend(Lt(asm.lhs, i) if i.is_positive else
                                  Gt(asm.lhs, i) for i in asm.rhs.args)
+            else:
+                processed.append(asm)
         else:
             processed.append(asm)
 

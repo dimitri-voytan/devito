@@ -31,6 +31,8 @@ class Le(sympy.Le):
     >>> Le(g, 1)
     g(x, y) <= 1
     """
+    is_Lte = True
+    is_Gte = False
 
     def __new__(cls, lhs, rhs=0, subdomain=None, **kwargs):
         kwargs.update({'evaluate': False})
@@ -78,6 +80,8 @@ class Lt(sympy.Lt):
     >>> Lt(g, 1)
     g(x, y) < 1
     """
+    is_Lte = True
+    is_Gte = False
 
     def __new__(cls, lhs, rhs=0, subdomain=None, **kwargs):
         kwargs.update({'evaluate': False})
@@ -125,6 +129,8 @@ class Ge(sympy.Ge):
     >>> Ge(g, 1)
     g(x, y) >= 1
     """
+    is_Lte = False
+    is_Gte = True
 
     def __new__(cls, lhs, rhs=0, subdomain=None, **kwargs):
         kwargs.update({'evaluate': False})
@@ -173,6 +179,8 @@ class Gt(sympy.Gt):
     >>> Gt(g, 1)
     g(x, y) > 1
     """
+    is_Lte = False
+    is_Gte = True
 
     def __new__(cls, lhs, rhs=0, subdomain=None, **kwargs):
         kwargs.update({'evaluate': False})

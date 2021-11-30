@@ -156,6 +156,7 @@ class Test_relations_w_assumptions(object):
         ([min, '[a, b, c, d]', '[Ge(b, a + d)]', 'MIN(a, MIN(d, c))']),
         ([min, '[a, b, c, d]', '[Lt(b + a, d)]', 'MIN(a, MIN(b, c))']),
         ([max, '[a, b, c, d]', '[Lt(b + a, d)]', 'MAX(d, c)']),
+        ([max, '[a, b, c, d]', '[Gt(a, b + c + d)]', 'a']),
     ])
     def test_relations_w_complex_assumptions(self, op, expr, assumptions, expected):
         """
@@ -191,6 +192,10 @@ class Test_relations_w_assumptions(object):
         ([max, '[a, b, c, d]', '[Gt(c, d + a).negated]', 'MAX(a, MAX(b, MAX(c, d)))']),
         ([max, '[a, b, c, d]', '[Lt(c, d + a).negated]', 'MAX(d, b)']),
         ([max, '[a, b, c, d]', '[Le(c, d + a).negated]', 'MAX(d, b)']),
+        ([max, '[a, b, c, d]', '[Le(c + b, d + a).negated]',
+          'MAX(a, MAX(b, MAX(c, d)))']),
+        ([max, '[a, b, c, d, e]', '[Gt(a, b + c + e)]',
+          'MAX(a, MAX(b, MAX(c, MAX(d, e))))']),
     ])
     def test_relations_w_complex_assumptions_II(self, op, expr, assumptions, expected):
         """
@@ -199,6 +204,7 @@ class Test_relations_w_assumptions(object):
         b = Symbol('b', positive=False)  # noqa
         c = Symbol('c', positive=True)  # noqa
         d = Symbol('d', positive=True)  # noqa
+        e = Symbol('e', positive=True)  # noqa
 
         eqn = eval(expr)
         assumptions = eval(assumptions)
