@@ -396,6 +396,14 @@ def evalrel(func=min, input=None, assumptions=[]):
 
     try:
         bool(sfunc(*input))  # Can it be evaluated or simplified?
+        exp = sfunc(*input)
+        try:
+            if exp.is_Function:
+                input = list(exp.args)
+            else:
+                return exp
+        except TypeError:
+            return rfunc(*input)
         input = list(OrderedDict.fromkeys(input))
         return rfunc(*input)
     except TypeError:
