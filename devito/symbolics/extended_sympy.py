@@ -538,7 +538,7 @@ MIN = Function('MIN')
 MAX = Function('MAX')
 
 
-def rmax(item, *args):
+def rmax(item=None, *args):
     """
     A utility function that recursively generates nested MAX relations.
     """
@@ -548,7 +548,7 @@ def rmax(item, *args):
         return MAX(item, rmax(*args))
 
 
-def rmin(item, *args):
+def rmin(item=None, *args):
     """
     A utility function that recursively generates nested MIN relations.
     """
