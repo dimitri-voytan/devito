@@ -7,7 +7,8 @@ from devito.logger import warning
 from devito.passes.iet.engine import iet_pass
 from devito.symbolics import MIN, MAX, evalrel
 from devito.types.relational import Le, Lt, Ge, Gt
-from devito.tools import is_integer, split
+from devito.tools import is_integer, split, as_list
+from sympy import Min, Max
 
 __all__ = ['avoid_denormals', 'hoist_prodders', 'relax_incr_dimensions', 'is_on_device']
 
@@ -123,34 +124,24 @@ def relax_incr_dimensions(iet, **kwargs):
             max_map[i.dim.root.symbolic_max] = root_max
             max_map[i.dim.symbolic_max] = i.symbolic_max
 
-
             defmin = [j for j in defmin if j not in (k.symbolic_min for
                       k in defmin if k.is_Symbol and not k.is_Scalar)]
 
             defmax = [j for j in defmax if j not in (k.symbolic_max for
                       k in defmax if k.is_Symbol and not k.is_Scalar)]
 
-
-            # import pdb;pdb.set_trace()
-
-            # minassumptions = [Gt(i > j) if (i.parent or i) is j else None for i in defines for j in defines]
-
             defmin = list(OrderedDict.fromkeys(defmin))
             defmax = list(OrderedDict.fromkeys(defmax))
 
+            maxf = Max(*defmax)
+            minf = Min(*defmin)
 
-            #defmin = [j.subs(min_map) if j in min_map else j for j in defmin]
-            #defmax = [j.subs(max_map) if j in max_map else j for j in defmax]
+            import pdb;pdb.set_trace()
+            defmin = as_list(minf.args or minf)
+            defmax = as_list(maxf.args or maxf)
 
-            defmin = [j.subs(min_map) for j in defmin if j in min_map]
-            defmax = [j.subs(max_map) for j in defmax if j in max_map]
-
-            # candsmax = evalrel(max, defmax)
-            # candsmin = evalrel(min, defmin)
-
-            # import pdb;pdb.set_trace()
-            #defmax = list(OrderedDict.fromkeys(candsmax.args))
-            #defmin = list(OrderedDict.fromkeys(candsmin.args))
+            defmin = [j.subs(min_map) if j in min_map else j for j in defmin]
+            defmax = [j.subs(max_map) if j in max_map else j for j in defmax]
 
             # Interval care
             iter_min = evalrel(max, defmin)
